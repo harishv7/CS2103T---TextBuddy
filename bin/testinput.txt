@@ -1,0 +1,37 @@
+add TextBuddy is awesome
+display
+add TextBuddy is great
+display
+add TextBuddy is amazing
+display
+delete 2
+display
+delete 1
+display
+add Regression testing in progress
+display
+clear
+display
+add CS2103T is amazing
+display
+add CS2103T is great
+display
+delete 7
+display
+delete 7ooo2
+display
+delete 1
+display
+add With Great Power Comes Great Responsibility
+display
+add Patience is Virtue
+display
+delete 1
+display
+clear
+add Regression Testing comes to an end
+display
+add Au Revoir
+display
+clear
+exit
