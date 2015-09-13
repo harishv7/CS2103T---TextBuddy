@@ -59,10 +59,12 @@ public class TextBuddy {
 	private static final String MESSAGE_ERROR_INVALID_LINE_TO_DELETE = "You have provided an invalid line number.";
 	private static final String MESSAGE_PROMPT_USER = "command: ";
 	private static final String MESSAGE_FILE_EMPTY = "%s is empty";
+	private static final String MESSAGE_SORT_SUCCESS = "%s has been sorted alphabetically";
+	private static final String MESSAGE_SEARCH_KEYWORD = "The following lines contain %s";
 
 	// List of Commands
 	enum CommandType {
-		ADD, DELETE, DISPLAY, CLEAR, INVALID, EXIT
+		ADD, DELETE, DISPLAY, CLEAR, SORT, SEARCH, INVALID, EXIT
 	};
 
 	// List of constants used to extract the correct parts of a string
@@ -174,6 +176,10 @@ public class TextBuddy {
 			  return CommandType.CLEAR;
 		  case "display" :
 			  return CommandType.DISPLAY;
+		  case "sort" :
+			  return CommandType.SORT;
+		  case "search" :
+			  return CommandType.DISPLAY;
 		  case "exit" :
 			  return CommandType.EXIT;
 		  default :
@@ -203,6 +209,10 @@ public class TextBuddy {
 		  case DISPLAY :
 			  displayFileContents();
 			  break;
+		  case SORT :
+			  sortFileContents();
+		  case SEARCH :
+			  searchFileContents(userInput);
 		  case EXIT :
 			  exitTextBuddy();
 			  break;
