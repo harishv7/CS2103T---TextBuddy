@@ -12,7 +12,7 @@ import java.util.Scanner;
  * write and save text onto a file saved to the disk. TextBuddy also helps to
  * delete specific lines of text from the file and clears the file's contents
  * when instructed to. The instructions are delivered in the form of commands,
- * namely, "display", "add", "delete", "clear", "exit".
+ * namely, "display", "add", "delete", "sort", "search", "clear", "exit".
  * The command format is given by the interaction below:
 
  	Welcome to TextBuddy. mytextfile.txt is ready for use
@@ -33,6 +33,17 @@ import java.util.Scanner;
 	all content deleted from mytextfile.txt
 	command: display
 	mytextfile.txt is empty
+	command: add C: A sample statement
+	added to mytextfile.txt: "C: A sample statement"
+	command: add B: A sample statement
+	added to mytextfile.txt: "B: A sample statement"
+	command: add A: A sample statement
+	added to mytextfile.txt: "A: A sample statement"
+	command: sort
+	mytextfile.txt has been sorted alphabetically
+	command: search A
+	The following lines contain cool
+	1. A: A sample statement
 	command: exit
 
  * Notes to user:
@@ -60,7 +71,8 @@ public class TextBuddy {
 	private static final String MESSAGE_PROMPT_USER = "command: ";
 	private static final String MESSAGE_FILE_EMPTY = "%s is empty";
 	private static final String MESSAGE_SORT_SUCCESS = "%s has been sorted alphabetically";
-	private static final String MESSAGE_SEARCH_KEYWORD = "The following lines contain %s";
+	private static final String MESSAGE_SEARCH_KEYWORD_SUCCESS = "The following lines contain %s";
+	private static final String MESSAGE_SEARCH_KEYWORD_FAILED = "There were no lines that contain %s";
 
 	// List of Commands
 	enum CommandType {
@@ -72,6 +84,7 @@ public class TextBuddy {
 	private static final int INDEX_OF_USER_COMMAND = 0;
 	private static final int INDEX_OF_LINE_NUMBER = 7;
 	private static final int INDEX_OF_LINE_TO_ADD = 4;
+	private static final int INDEX_OF_SEARCH_STRING = 7;
 	
 	// List of constants used to reflect error or successful exit
 	private static final int SYSTEM_EXIT_SUCCESS = 0;
@@ -179,7 +192,7 @@ public class TextBuddy {
 		  case "sort" :
 			  return CommandType.SORT;
 		  case "search" :
-			  return CommandType.DISPLAY;
+			  return CommandType.SEARCH;
 		  case "exit" :
 			  return CommandType.EXIT;
 		  default :
@@ -211,8 +224,10 @@ public class TextBuddy {
 			  break;
 		  case SORT :
 			  sortFileContents();
+			  break;
 		  case SEARCH :
 			  searchFileContents(userInput);
+			  break;
 		  case EXIT :
 			  exitTextBuddy();
 			  break;
@@ -223,7 +238,41 @@ public class TextBuddy {
 			  return;
 		}
 	}
+	
+	private static void sortFileContents() {
+		java.util.Collections.sort(storeText);
+		displaySuccessfulSortMessage();
+	}
+	
+	private static void displaySuccessfulSortMessage() {
+		System.out.println(String.format(MESSAGE_SORT_SUCCESS, fileName));
+	}
+	
+	private static void searchFileContents(String userInput) {
+		String searchString = userInput.substring(INDEX_OF_SEARCH_STRING);
+		displaySearchMessage(searchString);
+		boolean isSearchWordFound = false;
+		
+		for(int i = 0; i < storeText.size(); i++) {
+			if(storeText.get(i).contains(searchString)) {
+				System.out.println((i + 1) + ". " + storeText.get(i));
+				isSearchWordFound = true;
+			}
+		}
+		
+		if(!isSearchWordFound) {
+			displaySearchFailedMessage(searchString);
+		}
+	}
 
+	private static void displaySearchFailedMessage(String searchString) {
+		System.out.println(String.format(MESSAGE_SEARCH_KEYWORD_FAILED, searchString));
+	}
+	
+	private static void displaySearchMessage(String searchString) {
+		System.out.println(String.format(MESSAGE_SEARCH_KEYWORD_SUCCESS, searchString));
+	}
+	
 	/*
 	 * This operation deletes the user-specified line of text from the file.
 	 * 
